@@ -85,6 +85,7 @@
   import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
+  // 获取对应的ant-design的图标组件
   import {
     GithubFilled,
     WechatFilled,
@@ -92,6 +93,7 @@
     GoogleCircleFilled,
     TwitterCircleFilled,
   } from '@ant-design/icons-vue';
+  // 根据LoginStateEnum的切换 获取对应的表单名称
   import LoginFormTitle from './LoginFormTitle.vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -112,17 +114,20 @@
   const userStore = useUserStore();
 
   const { setLoginState, getLoginState } = useLoginState();
+  // 获取对应的表单检验规则
   const { getFormRules } = useFormRules();
 
   const formRef = ref();
   const loading = ref(false);
   const rememberMe = ref(false);
 
+  // 表单默认字段的值
   const formData = reactive({
     account: 'vben',
     password: '123456',
   });
 
+  // 校验当前表单
   const { validForm } = useFormValid(formRef);
 
   //onKeyStroke('Enter', handleLogin);
@@ -130,15 +135,19 @@
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
 
   async function handleLogin() {
+    // 如果校验通过 则返回对应的表单对象
     const data = await validForm();
     if (!data) return;
     try {
+      // 设置当前为loading中
       loading.value = true;
+      // 调用user store中的登录action 也就是调登录接口
       const userInfo = await userStore.login({
         password: data.password,
         username: data.account,
         mode: 'none', //不要默认的错误提示
       });
+      // 如果登录成功的话 会返回用户信息 代表登录成功
       if (userInfo) {
         notification.success({
           message: t('sys.login.loginSuccessTitle'),
@@ -153,6 +162,7 @@
         getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
       });
     } finally {
+      // 设置当前为loading 结束
       loading.value = false;
     }
   }

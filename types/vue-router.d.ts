@@ -28,7 +28,7 @@ declare module 'vue-router' {
     hideChildrenInMenu?: boolean;
     // Carrying parameters
     carryParam?: boolean;
-    // Used internally to mark single-level menus
+    // 用于在内部标记单层菜单
     single?: boolean;
     // Currently active menu
     currentActiveMenu?: string;

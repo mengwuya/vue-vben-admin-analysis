@@ -102,7 +102,7 @@ export const useAppStore = defineStore({
   },
 });
 
-// Need to be used outside the setup
+// Need to be used outside the setup 暴露出去 在外部使用
 export function useAppStoreWithOut() {
   return useAppStore(store);
 }

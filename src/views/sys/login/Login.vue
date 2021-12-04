@@ -81,11 +81,16 @@
     },
   });
 
+  // 获取全局配置对象
   const globSetting = useGlobSetting();
+  // 获取项目css类名的前缀
   const { prefixCls } = useDesign('login');
+  // 国际化插件
   const { t } = useI18n();
   const localeStore = useLocaleStore();
+  // 是否显示多语言切换功能
   const showLocale = localeStore.getShowPicker;
+  // 取出配置项中的项目名称
   const title = computed(() => globSetting?.title ?? '');
 </script>
 <style lang="less">

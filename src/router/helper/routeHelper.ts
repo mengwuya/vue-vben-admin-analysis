@@ -16,7 +16,7 @@ LayoutMap.set('IFRAME', IFRAME);
 
 let dynamicViewsModules: Record<string, () => Promise<Recordable>>;
 
-// Dynamic introduction
+// 动态路由的组件动态转换后进行导入
 function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
   dynamicViewsModules = dynamicViewsModules || import.meta.glob('../../views/**/*.{vue,tsx}');
   if (!routes) return;
@@ -67,7 +67,7 @@ function dynamicImport(
   }
 }
 
-// Turn background objects into routing objects
+// 将后台返回的对象转换为路由对象
 export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModule[]): T[] {
   routeList.forEach((route) => {
     const component = route.component as string;
@@ -93,21 +93,24 @@ export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModul
 }
 
 /**
- * Convert multi-level routing to level 2 routing
+ * Convert multi-level routing to level 2 routing 将多级路由转换为二级路由
  */
 export function flatMultiLevelRoutes(routeModules: AppRouteModule[]) {
+  // 将原路由进行深拷贝
   const modules: AppRouteModule[] = cloneDeep(routeModules);
   for (let index = 0; index < modules.length; index++) {
     const routeModule = modules[index];
+    // 判断是否是多级路由
     if (!isMultipleRoute(routeModule)) {
       continue;
     }
+    // 将路由处理成只有两级
     promoteRouteLevel(routeModule);
   }
   return modules;
 }
 
-// Routing level upgrade
+// Routing level upgrade 将路由处理成只有两级 如果有多级孩子则拍平
 function promoteRouteLevel(routeModule: AppRouteModule) {
   // Use vue-router to splice menus
   let router: Router | null = createRouter({
@@ -116,6 +119,7 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
   });
 
   const routes = router.getRoutes();
+  // 如果有多级路由 则将路由添加到对应的父亲的children下
   addToChildren(routes, routeModule.children || [], routeModule);
   router = null;
 
@@ -123,6 +127,7 @@ function promoteRouteLevel(routeModule: AppRouteModule) {
 }
 
 // Add all sub-routes to the secondary route
+// 将所有子路由添加到次级路由中
 function addToChildren(
   routes: RouteRecordNormalized[],
   children: AppRouteRecordRaw[],
@@ -144,7 +149,7 @@ function addToChildren(
   }
 }
 
-// Determine whether the level exceeds 2 levels
+// Determine whether the level exceeds 2 levels 判断是否超过2级
 function isMultipleRoute(routeModule: AppRouteModule) {
   if (!routeModule || !Reflect.has(routeModule, 'children') || !routeModule.children?.length) {
     return false;

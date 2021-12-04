@@ -156,7 +156,7 @@ export function forEach<T = any>(
 }
 
 /**
- * @description: Extract tree specified structure
+ * @description: Extract tree specified structure 提取树指定结构 传入对应的结构字段
  */
 export function treeMap<T = any>(treeData: T[], opt: { children?: string; conversion: Fn }): T[] {
   return treeData.map((item) => treeMapEach(item, opt));

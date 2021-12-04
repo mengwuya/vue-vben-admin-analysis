@@ -12,6 +12,7 @@
 
   const { getLoginState } = useLoginState();
 
+  // 根据LoginStateEnum的切换 获取对应的表单名称
   const getFormTitle = computed(() => {
     const titleObj = {
       [LoginStateEnum.RESET_PASSWORD]: t('sys.login.forgetFormTitle'),
