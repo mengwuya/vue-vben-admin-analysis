@@ -129,9 +129,9 @@ export interface ProjectConfig {
   useOpenBackTop: boolean;
   // Is it possible to embed iframe pages
   canEmbedIFramePage: boolean;
-  // Whether to delete unclosed messages and notify when switching the interface
+  // 切换接口时是否删除未关闭消息和通知
   closeMessageOnSwitch: boolean;
-  // Whether to cancel the http request that has been sent but not responded when switching the interface.
+  // 切换接口时是否取消已经发送但没有响应的http请求。
   removeAllHttpPending: boolean;
 }
 

@@ -13,7 +13,9 @@ const key = Symbol();
 let lastChangeTab: RouteLocationNormalized;
 
 export function setRouteChange(lastChangeRoute: RouteLocationNormalized) {
+  // 获取匹配到的路由原始数据
   const r = getRawRoute(lastChangeRoute);
+  // 触发路由更新改变
   emitter.emit(key, r);
   lastChangeTab = r;
 }
