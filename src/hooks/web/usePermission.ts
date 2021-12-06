@@ -25,7 +25,7 @@ export function usePermission() {
   const { closeAll } = useTabs(router);
 
   /**
-   * Change permission mode
+   * 改变项目的权限模式
    */
   async function togglePermissionMode() {
     appStore.setProjectConfig({
