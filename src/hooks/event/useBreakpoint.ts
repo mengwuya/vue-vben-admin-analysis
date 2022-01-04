@@ -24,11 +24,12 @@ export function useBreakpoint() {
   };
 }
 
-// Just call it once
+// Just call it once 只执行一次
 export function createBreakpointListen(fn?: (opt: CreateCallbackParams) => void) {
   const screenRef = ref<sizeEnum>(sizeEnum.XL);
   const realWidthRef = ref(window.innerWidth);
 
+  // 获取屏幕对应的宽度 设置对应的宽度枚举
   function getWindowWidth() {
     const width = document.body.clientWidth;
     const xs = screenMap.get(sizeEnum.XS)!;

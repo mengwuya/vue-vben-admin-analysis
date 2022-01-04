@@ -32,7 +32,7 @@ export default function ({
     if (!advanceState.isAdvanced) {
       return 0;
     }
-    // For some special cases, you need to manually specify additional blank lines
+    // 对于某些特殊情况，您需要手动指定额外的空行 即指定对应的空占位Span的大小
     const emptySpan = unref(getProps).emptySpan || 0;
 
     if (isNumber(emptySpan)) {
@@ -48,6 +48,7 @@ export default function ({
     return 0;
   });
 
+  // 进行防抖处理
   const debounceUpdateAdvanced = useDebounceFn(updateAdvanced, 30);
 
   watch(

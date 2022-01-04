@@ -86,6 +86,7 @@
     });
   });
 
+  // 省份数据
   const provincesOptions = [
     {
       id: 'guangdong',
@@ -100,6 +101,8 @@
       key: '2',
     },
   ];
+
+  // 城市数据
   const citiesOptionsData = {
     guangdong: [
       {
@@ -137,6 +140,7 @@
     ],
   };
 
+  // 表单字段配置
   const schemas: FormSchema[] = [
     {
       field: 'divider-basic',
@@ -353,16 +357,16 @@
           id: 1,
         },
         resultField: 'list',
-        // use name as label
+        // 使用name作为label
         labelField: 'name',
-        // use id as value
+        // 使用id作为value
         valueField: 'id',
-        // not request untill to select
+        // 不立即请求直到打开选择才请求
         immediate: false,
         onChange: (e) => {
           console.log('selected:', e);
         },
-        // atfer request callback
+        // 请求拿到options数据之后的回调
         onOptionsChange: (options) => {
           console.log('get options', options.length, options);
         },
@@ -450,6 +454,7 @@
         valueField: 'id',
         isBtn: true,
       },
+      defaultValue: '1',
       colProps: {
         span: 8,
       },
@@ -471,17 +476,18 @@
           options: provincesOptions,
           placeholder: '省份与城市联动',
           onChange: (e: any) => {
-            // console.log(e)
+            // console.log(e);
             let citiesOptions =
               e == 1
                 ? citiesOptionsData[provincesOptions[0].id]
                 : citiesOptionsData[provincesOptions[1].id];
-            // console.log(citiesOptions)
+            // 如果点击了清空操作 则将城市数据置空
             if (e === undefined) {
               citiesOptions = [];
             }
             formModel.city = undefined; //  reset city value
             const { updateSchema } = formActionType;
+            // 更新form Schema中的字段信息
             updateSchema({
               field: 'city',
               componentProps: {
@@ -565,7 +571,7 @@
       field: 'field22',
       component: 'Rate',
       label: '字段22',
-      defaultValue: 3,
+      defaultValue: 3.6,
       colProps: {
         span: 8,
       },

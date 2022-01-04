@@ -69,6 +69,7 @@
     emits: ['advanced-change', 'reset', 'submit', 'register'],
     setup(props, { emit, attrs }) {
       const formModel = reactive<Recordable>({});
+      // 模态弹窗控制上下文
       const modalFn = useModalContext();
 
       const advanceState = reactive<AdvanceState>({
@@ -79,6 +80,7 @@
       });
 
       const defaultValueRef = ref<Recordable>({});
+      // 是否初始化默认值
       const isInitedDefaultRef = ref(false);
       const propsRef = ref<Partial<FormProps>>({});
       const schemaRef = ref<Nullable<FormSchema[]>>(null);
@@ -86,7 +88,7 @@
 
       const { prefixCls } = useDesign('basic-form');
 
-      // Get the basic configuration of the form
+      // 获得表单的基本配置
       const getProps = computed((): FormProps => {
         return { ...props, ...unref(propsRef) } as FormProps;
       });
@@ -100,7 +102,7 @@
         ];
       });
 
-      // Get uniform row style and Row configuration for the entire form
+      // 设置整个表单样式获得统一的行样式和行配置
       const getRow = computed((): Recordable => {
         const { baseRowStyle = {}, rowProps } = unref(getProps);
         return {
@@ -109,6 +111,7 @@
         };
       });
 
+      // 获取绑定的属性值
       const getBindValue = computed(
         () => ({ ...attrs, ...props, ...unref(getProps) } as Recordable),
       );
@@ -117,11 +120,13 @@
         const schemas: FormSchema[] = unref(schemaRef) || (unref(getProps).schemas as any);
         for (const schema of schemas) {
           const { defaultValue, component } = schema;
-          // handle date type
+          // 处理表单组件中的日期组件字段 设置对应的defaultValue
           if (defaultValue && dateItemType.includes(component)) {
+            // 如果不是数组形式的话 则直接进行日期moment格式化
             if (!Array.isArray(defaultValue)) {
               schema.defaultValue = dateUtil(defaultValue);
             } else {
+              // 如果是数组形式的数据的话 则需遍历出每一项进行moment格式化
               const def: moment.Moment[] = [];
               defaultValue.forEach((item) => {
                 def.push(dateUtil(item));
@@ -130,6 +135,7 @@
             }
           }
         }
+        // 如果显示高级查询按钮等功能时 过滤分割线组件返回
         if (unref(getProps).showAdvancedButton) {
           return schemas.filter((schema) => schema.component !== 'Divider') as FormSchema[];
         } else {
@@ -137,6 +143,7 @@
         }
       });
 
+      // 处理高级选项
       const { handleToggleAdvanced } = useAdvanced({
         advanceState,
         emit,
@@ -146,6 +153,7 @@
         defaultValueRef,
       });
 
+      // 处理表单值
       const { handleFormValues, initDefault } = useFormValues({
         getProps,
         defaultValueRef,
@@ -153,6 +161,7 @@
         formModel,
       });
 
+      // 设置自动聚焦处理
       useAutoFocus({
         getSchema,
         getProps,
@@ -160,6 +169,7 @@
         formElRef: formElRef as Ref<FormActionType>,
       });
 
+      // 表单时间处理
       const {
         handleSubmit,
         setFieldsValue,
@@ -184,11 +194,13 @@
         handleFormValues,
       });
 
+      // 创建表单的上下文
       createFormContext({
         resetAction: resetFields,
         submitAction: handleSubmit,
       });
 
+      // 监听表单的model是否变化 以便设置对应的值
       watch(
         () => unref(getProps).model,
         () => {
@@ -201,6 +213,7 @@
         },
       );
 
+      // 监听表单组件中schemas是否变化 以便充值字段schema项
       watch(
         () => unref(getProps).schemas,
         (schemas) => {
@@ -212,7 +225,7 @@
         () => getSchema.value,
         (schema) => {
           nextTick(() => {
-            //  Solve the problem of modal adaptive height calculation when the form is placed in the modal
+            //  解决了窗体置于模态时模态自适应高度计算的问题
             modalFn?.redoModalHeight?.();
           });
           if (unref(isInitedDefaultRef)) {
@@ -225,10 +238,12 @@
         },
       );
 
+      // 合并props
       async function setProps(formProps: Partial<FormProps>): Promise<void> {
         propsRef.value = deepMerge(unref(propsRef) || {}, formProps);
       }
 
+      // 往表单model设置对应的键值
       function setFormModel(key: string, value: any) {
         formModel[key] = value;
         const { validateTrigger } = unref(getBindValue);
@@ -237,6 +252,7 @@
         }
       }
 
+      // 监听是否回车按下 回车提交表单
       function handleEnterPress(e: KeyboardEvent) {
         const { autoSubmitOnEnter } = unref(getProps);
         if (!autoSubmitOnEnter) return;
@@ -266,6 +282,7 @@
 
       onMounted(() => {
         initDefault();
+        // 初始化完成后派发事件到组件引用处
         emit('register', formActionType);
       });
 

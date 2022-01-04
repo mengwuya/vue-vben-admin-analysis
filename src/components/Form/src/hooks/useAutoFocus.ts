@@ -16,6 +16,7 @@ export async function useAutoFocus({
   isInitedDefault,
 }: UseAutoFocusContext) {
   watchEffect(async () => {
+    // 判断是否有默认初始化过值 并且是否设置了自动聚焦第一项
     if (unref(isInitedDefault) || !unref(getProps).autoFocusFirstItem) {
       return;
     }
@@ -27,8 +28,9 @@ export async function useAutoFocus({
       return;
     }
 
+    // 取出表单schemas中的第一项
     const firstItem = schemas[0];
-    // Only open when the first form item is input type
+    // 仅当第一个表单项为输入类型时打开
     if (!firstItem.component.includes('Input')) {
       return;
     }
