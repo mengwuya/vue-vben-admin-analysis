@@ -77,12 +77,13 @@
       const emitData = ref<any[]>([]);
       const isFirstLoad = ref(true);
 
-      // Embedded in the form, just use the hook binding to perform form verification
+      // 嵌入到表单中，只需使用钩子绑定来执行表单验证
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
       watch(
         apiData,
         (data) => {
+          // 生成级联选择器的options项
           const opts = generatorOptions(data);
           options.value = opts;
         },
@@ -90,6 +91,7 @@
       );
 
       function generatorOptions(options: any[]): Option[] {
+        // 从props中获取对应的label、value对应的映射字段
         const { labelField, valueField, numberToString, childrenField, isLeaf } = props;
         return options.reduce((prev, next: Recordable) => {
           if (next) {

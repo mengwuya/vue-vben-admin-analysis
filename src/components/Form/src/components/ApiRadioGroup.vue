@@ -61,15 +61,16 @@
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();
       const { t } = useI18n();
-      // Embedded in the form, just use the hook binding to perform form verification
+      // 嵌入到表单中，只需使用钩子绑定来执行表单验证
       const [state] = useRuleFormItem(props);
 
-      // Processing options value
+      // 处理option中的value
       const getOptions = computed(() => {
         const { labelField, valueField, numberToString } = props;
 
         return unref(options).reduce((prev, next: Recordable) => {
           if (next) {
+            // 将对应字段映射值 映射成label、value
             const value = next[valueField];
             prev.push({
               label: next[labelField],
@@ -93,7 +94,9 @@
         { deep: true },
       );
 
+      // 请求接口 获取对应的数据
       async function fetch() {
+        // 拿到api请求函数
         const api = props.api;
         if (!api || !isFunction(api)) return;
         options.value = [];
@@ -106,6 +109,7 @@
             return;
           }
           if (props.resultField) {
+            // 如果返回的数据不是数组的话 从返回的数据中取出传入的结果键值对应的value
             options.value = get(res, props.resultField) || [];
           }
           emitChange();
@@ -121,6 +125,7 @@
       }
 
       function handleChange(_, ...args) {
+        // 监听选中的项的变化 赋值
         emitData.value = args;
       }
 
