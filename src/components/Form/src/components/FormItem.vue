@@ -54,6 +54,7 @@
         formProps: Ref<FormProps>;
       };
 
+      // 设置表单中每个form-item下的label width的值
       const itemLabelWidthProp = useItemLabelWidth(schema, formProps);
 
       const getValues = computed(() => {
@@ -77,6 +78,7 @@
         if (isFunction(componentProps)) {
           componentProps = componentProps({ schema, tableAction, formModel, formActionType }) ?? {};
         }
+        // 如果组件是分割线
         if (schema.component === 'Divider') {
           componentProps = Object.assign({ type: 'horizontal' }, componentProps, {
             orientation: 'left',
@@ -86,6 +88,7 @@
         return componentProps as Recordable;
       });
 
+      // 获取是否禁用组件 用于动态设置禁用时触发
       const getDisable = computed(() => {
         const { disabled: globDisabled } = props.formProps;
         const { dynamicDisabled } = props.schema;
@@ -100,6 +103,7 @@
         return disabled;
       });
 
+      // isShow 为样式隐藏和显示 ifShow 为dom节点的隐藏和显示
       function getShow(): { isShow: boolean; isIfShow: boolean } {
         const { show, ifShow } = props.schema;
         const { showAdvancedButton } = props.formProps;
@@ -118,7 +122,9 @@
         if (isBoolean(ifShow)) {
           isIfShow = ifShow;
         }
+        // isShow 和 ifShow 可传入返回true或者false的函数 来决定是否显示隐藏
         if (isFunction(show)) {
+          // 执行对应的函数 得到返回结果
           isShow = show(unref(getValues));
         }
         if (isFunction(ifShow)) {
@@ -128,6 +134,7 @@
         return { isShow, isIfShow };
       }
 
+      // 处理检验规则的数据
       function handleRules(): ValidationRule[] {
         const {
           rules: defRules = [],
@@ -193,6 +200,7 @@
             rule.required = false;
           }
           if (component) {
+            // 如果rule中的type没值的话 则需要判断是否InputNumber 否则赋值string
             if (!Reflect.has(rule, 'type')) {
               rule.type = component === 'InputNumber' ? 'number' : 'string';
             }
@@ -226,6 +234,7 @@
           valueField,
         } = props.schema;
 
+        // 如果是Switch或者Checkbox 判断是否选中
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
 
         const eventKey = `on${upperFirst(changeEvent)}`;
@@ -252,6 +261,7 @@
           disabled: unref(getDisable),
         };
 
+        // 自动设置placeholder
         const isCreatePlaceholder = !propsData.disabled && autoSetPlaceHolder;
         // RangePicker place is an array
         if (isCreatePlaceholder && component !== 'RangePicker' && component) {

@@ -41,6 +41,7 @@
         emit('change', ...args);
       }
 
+      // 监听传入的params变化 则重新触发数据请求 判断是否是第一次请求
       watch(
         () => props.params,
         () => {
@@ -49,6 +50,7 @@
         { deep: true },
       );
 
+      // 监听传入的immediate 进行立即执行 判断是否首次加载过了
       watch(
         () => props.immediate,
         (v) => {
