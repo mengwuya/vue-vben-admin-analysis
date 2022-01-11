@@ -33,6 +33,7 @@ export function useTableForm(
     return key?.replace?.(/form\-/, '') ?? '';
   }
 
+  // 表格的搜索表单提交
   function handleSearchInfoChange(info: Recordable) {
     const { handleSearchInfoFn } = unref(propsRef);
     if (handleSearchInfoFn && isFunction(handleSearchInfoFn)) {

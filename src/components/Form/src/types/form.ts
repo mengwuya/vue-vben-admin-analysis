@@ -75,7 +75,7 @@ export interface FormProps {
   schemas?: FormSchema[];
   // Function values used to merge into dynamic control form items
   mergeDynamicData?: Recordable;
-  // Compact mode for search forms
+  // 搜索表单的紧凑模式
   compact?: boolean;
   // Blank line span
   emptySpan?: number | Partial<ColEx>;
