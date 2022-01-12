@@ -24,12 +24,15 @@ function itemRender({ page, type, originalElement }: ItemRender) {
 export function usePagination(refProps: ComputedRef<BasicTableProps>) {
   const { t } = useI18n();
 
+  // 分页配置项
   const configRef = ref<PaginationProps>({});
+  // 默认展示分页器
   const show = ref(true);
 
   watch(
     () => unref(refProps).pagination,
     (pagination) => {
+      // pagination为对象时 需要合并对应的配置项
       if (!isBoolean(pagination) && pagination) {
         configRef.value = {
           ...unref(configRef),
@@ -40,27 +43,30 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
   );
 
   const getPaginationInfo = computed((): PaginationProps | boolean => {
+    // 从表格的props中获取传入的pagination
     const { pagination } = unref(refProps);
 
+    // 如果不显示分页器 或者 传入的pagination为布尔值并且pagination为false 则直接返回false
     if (!unref(show) || (isBoolean(pagination) && !pagination)) {
       return false;
     }
 
     return {
-      current: 1,
-      pageSize: PAGE_SIZE,
+      current: 1, // 默认当前页为1
+      pageSize: PAGE_SIZE, // 配置默认的每页最大条数
       size: 'small',
       defaultPageSize: PAGE_SIZE,
       showTotal: (total) => t('component.table.total', { total }),
-      showSizeChanger: true,
-      pageSizeOptions: PAGE_SIZE_OPTIONS,
-      itemRender: itemRender,
-      showQuickJumper: true,
-      ...(isBoolean(pagination) ? {} : pagination),
-      ...unref(configRef),
+      showSizeChanger: true, // 每页条数选取器是否展示 默认展示
+      pageSizeOptions: PAGE_SIZE_OPTIONS, // 从表格组件配置中取出对应的条数配置项
+      itemRender: itemRender, // 渲染
+      showQuickJumper: true, // 是否展示快速跳转页数
+      ...(isBoolean(pagination) ? {} : pagination), // 如果传入的pagination为布尔值 则默认空对象
+      ...unref(configRef), // 覆盖对应的配置
     };
   });
 
+  // 暴露出设置分页配置函数  传入的参数项与paginationInfo合并
   function setPagination(info: Partial<PaginationProps>) {
     const paginationInfo = unref(getPaginationInfo);
     configRef.value = {

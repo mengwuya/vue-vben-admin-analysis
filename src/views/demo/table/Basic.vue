@@ -41,12 +41,15 @@
       const striped = ref(true);
       const border = ref(true);
       const pagination = ref<any>(false);
+      // 是否可以自适应调整大小
       function toggleCanResize() {
         canResize.value = !canResize.value;
       }
+      // 切换斑马纹
       function toggleStriped() {
         striped.value = !striped.value;
       }
+      // 切换loading状态
       function toggleLoading() {
         loading.value = true;
         setTimeout(() => {

@@ -47,8 +47,10 @@ export function useDataSource(
     filterInfo: {},
   });
   const dataSourceRef = ref<Recordable[]>([]);
+  // 存放datasource的原始数据
   const rawDataSourceRef = ref<Recordable>({});
 
+  // 监听dataSourceRef 重新对tableData表格源数据进行赋值
   watchEffect(() => {
     tableData.value = unref(dataSourceRef);
   });

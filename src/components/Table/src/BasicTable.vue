@@ -106,7 +106,9 @@
         return { ...props, ...unref(innerPropsRef) } as BasicTableProps;
       });
 
+      // 是否固定页面的高度 表格滚动 默认值为false
       const isFixedHeightPage = inject(PageWrapperFixedHeightKey, false);
+      // 如果有开启页面固定高度 则需要包裹在PageWrapper组件中才行
       watchEffect(() => {
         unref(isFixedHeightPage) &&
           props.canResize &&
@@ -116,6 +118,7 @@
       });
 
       const { getLoading, setLoading } = useLoading(getProps);
+      // 配置分页参数
       const {
         getPaginationInfo,
         getPagination,
@@ -124,6 +127,7 @@
         getShowPagination,
       } = usePagination(getProps);
 
+      // 表格中项的选中处理
       const {
         getRowSelection,
         getRowSelectionRef,
@@ -134,6 +138,7 @@
         setSelectedRowKeys,
       } = useRowSelection(getProps, tableData, emit);
 
+      // 表格组件的数据源处理
       const {
         handleTableChange: onTableChange,
         getDataSourceRef,

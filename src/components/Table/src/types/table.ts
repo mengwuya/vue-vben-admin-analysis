@@ -18,25 +18,25 @@ export interface TableCurrentDataSource<T = Recordable> {
 
 export interface TableRowSelection<T = any> extends ITableRowSelection {
   /**
-   * Callback executed when selected rows change
+   * 所选行更改时执行的回调
    * @type Function
    */
   onChange?: (selectedRowKeys: string[] | number[], selectedRows: T[]) => any;
 
   /**
-   * Callback executed when select/deselect one row
+   * 当选择/取消选择一行时执行的回调
    * @type Function
    */
   onSelect?: (record: T, selected: boolean, selectedRows: Object[], nativeEvent: Event) => any;
 
   /**
-   * Callback executed when select/deselect all rows
+   * 全选时回调
    * @type Function
    */
   onSelectAll?: (selected: boolean, selectedRows: T[], changeRows: T[]) => any;
 
   /**
-   * Callback executed when row selection is inverted
+   * 当行选择反转时执行的回调
    * @type Function
    */
   onSelectInvert?: (selectedRows: string[] | number[]) => any;

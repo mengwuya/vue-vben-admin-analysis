@@ -70,11 +70,13 @@
       const footerRef = ref(null);
       const { prefixCls } = useDesign('page-wrapper');
 
+      // 暴露提供页面是否固定高度出去给别的组件进行inject消费
       provide(
         PageWrapperFixedHeightKey,
         computed(() => props.fixedHeight),
       );
 
+      // 页面是否全屏
       const getIsContentFullHeight = computed(() => {
         return props.contentFullHeight;
       });
@@ -99,6 +101,7 @@
         ];
       });
 
+      // 是否展示页脚说明
       const getShowFooter = computed(() => slots?.leftFooter || slots?.rightFooter);
 
       const getHeaderSlots = computed(() => {
